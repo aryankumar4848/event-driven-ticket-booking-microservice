@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: event-postgres
+    environment:
+      POSTGRES_DB: eventdb
+      POSTGRES_USER: eventuser
+      POSTGRES_PASSWORD: eventpass
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: event-redis
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: event-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  event-service:
+    build: ./event-service
+    container_name: event-service
+    depends_on:
+      - postgres
+      - redis
+      - eureka-server
+    ports:
+      - "8081:8080"
+
+  booking-service:
+    build: ./booking-service
+    container_name: booking-service
+    depends_on:
+      - event-service
+      - rabbitmq
+      - eureka-server
+    ports:
+      - "8082:8080"
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    depends_on:
+      - rabbitmq
+      - eureka-server
+    ports:
+      - "8083:8080"
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    depends_on:
+      - eureka-server
+      - event-service
+      - booking-service
+    ports:
+      - "8080:8080"
+

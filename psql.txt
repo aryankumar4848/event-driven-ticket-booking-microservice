@@ -1,0 +1,10 @@
+Database [postgres]: eventdb
+Port [5432]:
+Username [postgres]: eventuser
+Password for user eventuser:
+
+\dt for  List of tables
+
+\d event for Event table info
+
+SELECT * FROM event;   for Rows
