@@ -1,4 +1,4 @@
-# Velotix 🎟️ - A Microservice-based Event Management & Ticket Booking System
+# Microservice-based Event Management & Ticket Booking System
 
 A simple Spring Boot microservices project that demonstrates service discovery, inter-service communication, database-backed CRUD, Swagger documentation, and Docker Compose deployment.
 
